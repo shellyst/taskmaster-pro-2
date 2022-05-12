@@ -148,7 +148,7 @@ $(".card .list-group").sortable({
     // Trim down list's ID to match object property.
     var arrName = $(this).attr("id").replace("list-", "");
 
-    // update array on tasks object and save
+    // Update array on tasks object and save.
     tasks[arrName] = tempArr;
     saveTasks();
 
