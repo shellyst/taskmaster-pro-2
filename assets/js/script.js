@@ -72,6 +72,12 @@ $("#modalDueDate").datepicker({
   minDate: 1,
 });
 
+setInterval(function () {
+  $(".card .list-group-item").each(function (index, el) {
+    auditTask(el);
+  });
+}, 1000 * 60 * 30);
+
 // Sort tasks.
 $(".card .list-group").sortable({
   connectWith: $(".card .list-group"),
@@ -80,15 +86,19 @@ $(".card .list-group").sortable({
   // Tells jQuery to create a copy of the dragged element and move the copy instead of the original.
   helper: "clone",
   activate: function (event) {
-    console.log("activate", this);
+    $(this).addClass("dropover");
+    $(".bottom-trash").addClass(".bottom-trash-drag");
   },
   deactivate: function (event) {
-    console.log("deactivate", this);
+    $(this).removeClass("dropover");
+    ".bottom-trash".removeClass("bottom-trash-drag");
   },
   over: function (event) {
+    $(event.target).addClass("dropover-active");
     console.log("over", event.target);
   },
   out: function (event) {
+    $(event.target).removeClass("dropover-active");
     console.log("out", event.target);
   },
   update: function (event) {
@@ -131,10 +141,10 @@ $("#trash").droppable({
     console.log("drop");
   },
   over: function (event, ui) {
-    console.log("over");
+    $(".bottom-trash").addClass(".bottom-trash-active");
   },
   out: function (event, ui) {
-    console.log("out");
+    $(".bottom-trash").removeClass("bottom-trash-active");
   },
 });
 
@@ -151,7 +161,7 @@ $("#task-form-modal").on("shown.bs.modal", function () {
 });
 
 // save button in modal was clicked
-$("#task-form-modal .btn-primary").click(function () {
+$("#task-form-modal .btn-save").click(function () {
   // get form values
   var taskText = $("#modalTaskDescription").val();
   var taskDate = $("#modalDueDate").val();
